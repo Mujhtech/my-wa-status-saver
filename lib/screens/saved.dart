@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:thumbnails/thumbnails.dart';
 import 'package:whatsapp_status_saver/screens/view.dart';
 
@@ -72,56 +73,63 @@ class _MySavedState extends State<MySaved> {
                                   builder: (context) =>
                                       ViewStatus(filePath: filePath),
                                 )),
-                            child: ClipRRect(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(12)),
-                                child: Container(
-                                  decoration: const BoxDecoration(
-                                    gradient: LinearGradient(
-                                      // Where the linear gradient begins and ends
-                                      begin: Alignment.bottomLeft,
-                                      end: Alignment.topRight,
-                                      stops: [0.1, 0.3, 0.5, 0.7, 0.9],
-                                      colors: [
-                                        Color(0xffb7d8cf),
-                                        Color(0xffb7d8cf),
-                                        Color(0xffb7d8cf),
-                                        Color(0xffb7d8cf),
-                                        Color(0xffb7d8cf),
-                                      ],
+                            child: Stack(children: [
+                              ClipRRect(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(12)),
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.bottomLeft,
+                                        end: Alignment.topRight,
+                                        stops: [0.1, 0.3, 0.5, 0.7, 0.9],
+                                        colors: [
+                                          Color(0xffb7d8cf),
+                                          Color(0xffb7d8cf),
+                                          Color(0xffb7d8cf),
+                                          Color(0xffb7d8cf),
+                                          Color(0xffb7d8cf),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  child: FutureBuilder(
-                                      future: _getImage(filePath),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.connectionState ==
-                                            ConnectionState.done) {
-                                          if (snapshot.hasData) {
+                                    child: FutureBuilder(
+                                        future: _getImage(filePath),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.done) {
+                                            if (snapshot.hasData) {
+                                              return Hero(
+                                                tag: filePath,
+                                                child: Image.file(
+                                                  File(snapshot.data),
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              );
+                                            } else {
+                                              return const Center(
+                                                child:
+                                                    CircularProgressIndicator(),
+                                              );
+                                            }
+                                          } else {
                                             return Hero(
                                               tag: filePath,
-                                              child: Image.file(
-                                                File(snapshot.data),
-                                                fit: BoxFit.cover,
+                                              child: SizedBox(
+                                                height: 280.0,
+                                                child: Image.asset(
+                                                    'assets/images/video_loader.gif'),
                                               ),
                                             );
-                                          } else {
-                                            return const Center(
-                                              child:
-                                                  CircularProgressIndicator(),
-                                            );
                                           }
-                                        } else {
-                                          return Hero(
-                                            tag: filePath,
-                                            child: SizedBox(
-                                              height: 280.0,
-                                              child: Image.asset(
-                                                  'assets/images/video_loader.gif'),
-                                            ),
-                                          );
-                                        }
-                                      }),
-                                )),
+                                        }),
+                                  )),
+                              Center(
+                                  child: Icon(
+                                FontAwesomeIcons.playCircle,
+                                size: 30,
+                                color: Theme.of(context).iconTheme.color,
+                              )),
+                            ]),
                           );
                   },
                   staggeredTileBuilder: (i) =>

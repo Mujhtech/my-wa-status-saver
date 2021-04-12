@@ -8,8 +8,8 @@
     
    <application
         android:requestLegacyExternalStorage="true"
-        android:label="My WA Status Saver"
-        android:icon="@mipmap/ic_launcher">
+        android:label="MyWAStatusSaver"
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

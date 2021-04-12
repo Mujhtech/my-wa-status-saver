@@ -6,6 +6,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:intl/intl.dart';
+import 'package:thumbnails/thumbnails.dart';
+import 'package:video_player/video_player.dart';
+import 'package:whatsapp_status_saver/screens/video_player.dart';
 
 class ViewStatus extends StatefulWidget {
   final String filePath;
@@ -15,6 +18,15 @@ class ViewStatus extends StatefulWidget {
 }
 
 class _ViewStatusState extends State<ViewStatus> {
+  Future<String> _getImage(videoPathUrl) async {
+    final thumb = await Thumbnails.getThumbnail(
+        videoFile: videoPathUrl,
+        imageType:
+            ThumbFormat.PNG, //this image will store in created folderpath
+        quality: 10);
+    return thumb;
+  }
+
   Future<bool> saveImage(imgPath) async {
     final myUri = Uri.parse(imgPath);
     final originalImageFile = File.fromUri(myUri);
@@ -36,7 +48,7 @@ class _ViewStatusState extends State<ViewStatus> {
     }
   }
 
-  Future<bool> saveFIle(filePath) async {
+  Future<bool> saveImgFIle(filePath) async {
     try {
       final originalFile = File(filePath);
       final directory = await getExternalStorageDirectory();
@@ -57,6 +69,27 @@ class _ViewStatusState extends State<ViewStatus> {
     }
   }
 
+  Future<bool> saveVidFIle(filePath) async {
+    try {
+      final originalFile = File(filePath);
+      final directory = await getExternalStorageDirectory();
+      print('directory: $directory');
+      if (!Directory('/storage/emulated/0/MyWaStausSaver').existsSync()) {
+        Directory('/storage/emulated/0/MyWaStausSaver')
+            .createSync(recursive: true);
+      }
+      DateTime now = DateTime.now();
+      String formattedDate = DateFormat('yyyy-MM-dd–kk-mm').format(now);
+      final newFileName =
+          '/storage/emulated/0/MyWaStausSaver/IMAGE-$formattedDate.mp4';
+      print(newFileName);
+      await originalFile.copy(newFileName);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   Future<bool> deleteFile(imgPath) async {
     try {
       await File(imgPath).delete();
@@ -64,6 +97,76 @@ class _ViewStatusState extends State<ViewStatus> {
     } catch (e) {
       return false;
     }
+  }
+
+  void _onLoading(String file) {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Center(
+                child: Container(
+                  height: 400,
+                  width: 250,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(40),
+                    image: DecorationImage(
+                      image: FileImage(File(file)),
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                  padding: const EdgeInsets.all(15.0),
+                  child: Column(
+                    children: <Widget>[],
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  void _onPlaying() {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(40),
+                    image: DecorationImage(
+                      image: FileImage(File(widget.filePath)),
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                  padding: const EdgeInsets.all(15.0),
+                  child: Column(
+                    children: <Widget>[
+                      VideoPlayerBox(
+                          videoPlayerController:
+                              VideoPlayerController.file(File(widget.filePath)),
+                          looping: true,
+                          videoSrc: widget.filePath),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
   }
 
   @override
@@ -86,32 +189,114 @@ class _ViewStatusState extends State<ViewStatus> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Container(
-            height: 400,
-            width: 250,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(widget.filePath),
-                fit: BoxFit.cover,
-              ),
-              borderRadius: BorderRadius.circular(20),
-            ),
-          ),
+          widget.filePath.endsWith(".jpg")
+              ? GestureDetector(
+                  onTap: () {
+                    _onLoading(widget.filePath);
+                  },
+                  child: Container(
+                    height: 400,
+                    width: 250,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: FileImage(File(widget.filePath)),
+                        fit: BoxFit.cover,
+                      ),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                )
+              : GestureDetector(
+                  onTap: () {
+                    _onPlaying();
+                  },
+                  child: Stack(
+                    alignment: AlignmentDirectional.center,
+                    children: [
+                      Container(
+                        height: 400,
+                        width: 250,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          gradient: LinearGradient(
+                            begin: Alignment.bottomLeft,
+                            end: Alignment.topRight,
+                            stops: [0.1, 0.3, 0.5, 0.7, 0.9],
+                            colors: [
+                              Color(0xffb7d8cf),
+                              Color(0xffb7d8cf),
+                              Color(0xffb7d8cf),
+                              Color(0xffb7d8cf),
+                              Color(0xffb7d8cf),
+                            ],
+                          ),
+                        ),
+                        child: FutureBuilder(
+                            future: _getImage(widget.filePath),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
+                                if (snapshot.hasData) {
+                                  return Hero(
+                                    tag: widget.filePath,
+                                    child: Image.file(
+                                      File(snapshot.data),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  );
+                                } else {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+                              } else {
+                                return Hero(
+                                  tag: widget.filePath,
+                                  child: SizedBox(
+                                    height: 280.0,
+                                    child: Image.asset(
+                                        'assets/images/video_loader.gif'),
+                                  ),
+                                );
+                              }
+                            }),
+                      ),
+                      Center(
+                          child: Icon(
+                        FontAwesomeIcons.playCircle,
+                        size: 30,
+                        color: Theme.of(context).iconTheme.color,
+                      )),
+                    ],
+                  ),
+                ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               GestureDetector(
                 onTap: () async {
-                  if (widget.filePath
-                      .endsWith(".jpg")) if (await saveFIle(widget.filePath)) {
-                    Fluttertoast.showToast(
-                        msg: "Saved...",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.BOTTOM,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.grey,
-                        textColor: Colors.black,
-                        fontSize: 16.0);
+                  if (widget.filePath.endsWith(".jpg")) {
+                    if (await saveImgFIle(widget.filePath)) {
+                      Fluttertoast.showToast(
+                          msg: "Saved...",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.grey,
+                          textColor: Colors.black,
+                          fontSize: 16.0);
+                    }
+                  } else {
+                    if (await saveVidFIle(widget.filePath)) {
+                      Fluttertoast.showToast(
+                          msg: "Saved...",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.grey,
+                          textColor: Colors.black,
+                          fontSize: 16.0);
+                    }
                   }
                 },
                 child: Container(
