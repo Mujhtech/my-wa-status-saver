@@ -35,7 +35,7 @@ class _MySavedState extends State<MySaved> {
         elevation: 0,
         backgroundColor: Theme.of(context).backgroundColor,
         title: Text(
-          'My Saved',
+          'My Saved (${fileList.length})',
           style: Theme.of(context).textTheme.bodyText1.copyWith(fontSize: 16),
         ),
       ),

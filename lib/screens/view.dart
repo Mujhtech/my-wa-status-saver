@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:intl/intl.dart';
+import 'package:share/share.dart';
 import 'package:thumbnails/thumbnails.dart';
 import 'package:video_player/video_player.dart';
 import 'package:whatsapp_status_saver/screens/video_player.dart';
@@ -326,7 +327,10 @@ class _ViewStatusState extends State<ViewStatus> {
                 ),
               ),
               GestureDetector(
-                onTap: () async {},
+                onTap: () async {
+                  Share.shareFiles([widget.filePath],
+                      text: 'My WA Status Saver');
+                },
                 child: Container(
                   height: 100,
                   width: 90,

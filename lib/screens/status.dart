@@ -15,7 +15,7 @@ class MyStatus extends StatefulWidget {
 }
 
 class _MyStatusState extends State<MyStatus> {
-  final imageList =
+  final fileList =
       _photoDir.listSync().map((item) => item.path).toList(growable: false);
 
   Future<String> _getImage(videoPathUrl) async {
@@ -40,7 +40,7 @@ class _MyStatusState extends State<MyStatus> {
         elevation: 0,
         backgroundColor: Theme.of(context).backgroundColor,
         title: Text(
-          'My Status',
+          'My Status (${fileList.length})',
           style: Theme.of(context).textTheme.bodyText1.copyWith(fontSize: 16),
         ),
       ),
@@ -52,10 +52,10 @@ class _MyStatusState extends State<MyStatus> {
                   child: StaggeredGridView.countBuilder(
                     physics: BouncingScrollPhysics(
                         parent: AlwaysScrollableScrollPhysics()),
-                    itemCount: imageList.length,
+                    itemCount: fileList.length,
                     crossAxisCount: 4,
                     itemBuilder: (context, index) {
-                      final filePath = imageList[index];
+                      final filePath = fileList[index];
                       return filePath.endsWith(".jpg")
                           ? AnimationConfiguration.staggeredGrid(
                               position: index,

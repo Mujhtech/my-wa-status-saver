@@ -29,6 +29,7 @@ dependencies:
   chewie: ^1.0.0
   video_player: ^2.1.1
   flutter_staggered_animations: ^1.0.0
+  share: ^2.0.1
 
 dev_dependencies:
   flutter_test:
