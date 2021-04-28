@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:share/share.dart';
 import 'package:whatsapp_status_saver/screens/saved.dart';
 import 'package:whatsapp_status_saver/screens/status.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -111,6 +112,73 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    void settingModalBottomSheet() {
+      showModalBottomSheet(
+          backgroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
+          isScrollControlled: true,
+          enableDrag: true,
+          context: context,
+          builder: (BuildContext bc) {
+            return Container(
+              padding: EdgeInsets.fromLTRB(15, 0, 15, 20),
+              height: MediaQuery.of(context).size.height - 200,
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Center(
+                    child: SizedBox(
+                      width: 50,
+                      child: Divider(
+                          thickness: 3, color: Theme.of(context).dividerColor),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Rate Us',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText1
+                                .copyWith(fontSize: 16, color: Colors.grey)),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Share.share(
+                                'Download Whatsapp status with us stress click the link below to get My Whatsapp Status App \n https://mujh.tech');
+                          },
+                          child: Text('Share with people',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1
+                                  .copyWith(fontSize: 16, color: Colors.grey)),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text('V1.0',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText1
+                                .copyWith(fontSize: 16, color: Colors.grey))
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            );
+          });
+    }
+
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -249,29 +317,34 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                  Container(
-                    height: 100,
-                    width: 90,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).backgroundColor,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          FontAwesomeIcons.cog,
-                          color: Theme.of(context).iconTheme.color,
-                          size: 30,
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          'Settings',
-                          style: Theme.of(context).textTheme.bodyText1,
-                        )
-                      ],
+                  GestureDetector(
+                    onTap: () {
+                      settingModalBottomSheet();
+                    },
+                    child: Container(
+                      height: 100,
+                      width: 90,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).backgroundColor,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            FontAwesomeIcons.cog,
+                            color: Theme.of(context).iconTheme.color,
+                            size: 30,
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            'Settings',
+                            style: Theme.of(context).textTheme.bodyText1,
+                          )
+                        ],
+                      ),
                     ),
                   )
                 ],
