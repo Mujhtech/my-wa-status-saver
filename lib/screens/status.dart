@@ -6,7 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:thumbnails/thumbnails.dart';
 import 'package:whatsapp_status_saver/screens/view.dart';
 
-final Directory _photoDir =
+final Directory _fileDir =
     Directory('/storage/emulated/0/WhatsApp/Media/.Statuses');
 
 class MyStatus extends StatefulWidget {
@@ -15,8 +15,7 @@ class MyStatus extends StatefulWidget {
 }
 
 class _MyStatusState extends State<MyStatus> {
-  final fileList =
-      _photoDir.listSync().map((item) => item.path).toList(growable: false);
+  var fileList;
 
   Future<String> _getImage(videoPathUrl) async {
     final thumb = await Thumbnails.getThumbnail(
@@ -25,6 +24,13 @@ class _MyStatusState extends State<MyStatus> {
             ThumbFormat.PNG, //this image will store in created folderpath
         quality: 10);
     return thumb;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fileList =
+        _fileDir.listSync().map((item) => item.path).toList(growable: false);
   }
 
   @override
@@ -45,7 +51,7 @@ class _MyStatusState extends State<MyStatus> {
         ),
       ),
       body: Container(
-        child: Directory('${_photoDir.path}').existsSync()
+        child: Directory('${_fileDir.path}').existsSync()
             ? Container(
                 margin: const EdgeInsets.only(left: 8, right: 8),
                 child: AnimationLimiter(

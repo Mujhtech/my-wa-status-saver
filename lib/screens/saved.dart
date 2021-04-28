@@ -15,8 +15,7 @@ class MySaved extends StatefulWidget {
 }
 
 class _MySavedState extends State<MySaved> {
-  final fileList =
-      _fileDir.listSync().map((item) => item.path).toList(growable: false);
+  var fileList;
 
   Future<String> _getImage(videoPathUrl) async {
     final thumb = await Thumbnails.getThumbnail(
@@ -25,6 +24,13 @@ class _MySavedState extends State<MySaved> {
             ThumbFormat.PNG, //this image will store in created folderpath
         quality: 10);
     return thumb;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fileList =
+        _fileDir.listSync().map((item) => item.path).toList(growable: false);
   }
 
   @override

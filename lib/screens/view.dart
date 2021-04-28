@@ -368,6 +368,7 @@ class _ViewStatusState extends State<ViewStatus> {
                         backgroundColor: Colors.grey,
                         textColor: Colors.black,
                         fontSize: 16.0);
+                    Navigator.pop(context);
                   }
                 },
                 child: Container(
