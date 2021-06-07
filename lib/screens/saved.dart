@@ -4,9 +4,10 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:thumbnails/thumbnails.dart';
-import 'package:whatsapp_status_saver/screens/view.dart';
+import 'package:whatsapp_status_saver/screens/saved_view.dart';
+import 'package:whatsapp_status_saver/utils.dart';
 
-final Directory _fileDir = Directory('/storage/emulated/0/MyWaStausSaver');
+final Directory _fileDir = Directory(saveFolderPath);
 
 class MySaved extends StatefulWidget {
   @override
@@ -76,7 +77,8 @@ class _MySavedState extends State<MySaved> {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                ViewStatus(filePath: filePath),
+                                                SavedViewStatus(
+                                                    filePath: filePath),
                                           )),
                                       child: Hero(
                                           tag: filePath,
@@ -99,8 +101,8 @@ class _MySavedState extends State<MySaved> {
                                     onTap: () => Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) =>
-                                              ViewStatus(filePath: filePath),
+                                          builder: (context) => SavedViewStatus(
+                                              filePath: filePath),
                                         )),
                                     child: Stack(children: [
                                       ClipRRect(

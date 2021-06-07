@@ -267,7 +267,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
-                            FontAwesomeIcons.cog,
+                            FontAwesomeIcons.shareSquare,
                             color: Theme.of(context).iconTheme.color,
                             size: 30,
                           ),

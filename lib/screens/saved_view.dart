@@ -1,25 +1,20 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:intl/intl.dart';
 import 'package:share/share.dart';
 import 'package:thumbnails/thumbnails.dart';
 import 'package:video_player/video_player.dart';
 import 'package:whatsapp_status_saver/screens/video_player.dart';
-import 'package:whatsapp_status_saver/utils.dart';
 
-class ViewStatus extends StatefulWidget {
+class SavedViewStatus extends StatefulWidget {
   final String filePath;
-  ViewStatus({@required this.filePath});
+  SavedViewStatus({@required this.filePath});
   @override
-  _ViewStatusState createState() => _ViewStatusState();
+  _SavedViewStatusState createState() => _SavedViewStatusState();
 }
 
-class _ViewStatusState extends State<ViewStatus> {
+class _SavedViewStatusState extends State<SavedViewStatus> {
   Future<String> _getImage(videoPathUrl) async {
     final thumb = await Thumbnails.getThumbnail(
         videoFile: videoPathUrl,
@@ -27,65 +22,6 @@ class _ViewStatusState extends State<ViewStatus> {
             ThumbFormat.PNG, //this image will store in created folderpath
         quality: 10);
     return thumb;
-  }
-
-  Future<bool> saveImage(imgPath) async {
-    final myUri = Uri.parse(imgPath);
-    final originalImageFile = File.fromUri(myUri);
-    Uint8List bytes;
-    await originalImageFile.readAsBytes().then((value) {
-      bytes = Uint8List.fromList(value);
-      print('reading of bytes is completed');
-    }).catchError((onError) {
-      print('Exception Error while reading audio from path:' +
-          onError.toString());
-    });
-    final result = await ImageGallerySaver.saveImage(Uint8List.fromList(bytes));
-    print(result);
-
-    if (result['isSuccess']) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  Future<bool> saveImgFIle(filePath) async {
-    try {
-      final originalFile = File(filePath);
-      final directory = await getExternalStorageDirectory();
-      print('directory: $directory');
-      if (!Directory(saveFolderPath).existsSync()) {
-        Directory(saveFolderPath).createSync(recursive: true);
-      }
-      DateTime now = DateTime.now();
-      String formattedDate = DateFormat('yyyy-MM-dd–kk-mm').format(now);
-      final newFileName = saveFolderPath + '/IMAGE-$formattedDate.jpg';
-      print(newFileName);
-      await originalFile.copy(newFileName);
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  Future<bool> saveVidFIle(filePath) async {
-    try {
-      final originalFile = File(filePath);
-      final directory = await getExternalStorageDirectory();
-      print('directory: $directory');
-      if (!Directory(saveFolderPath).existsSync()) {
-        Directory(saveFolderPath).createSync(recursive: true);
-      }
-      DateTime now = DateTime.now();
-      String formattedDate = DateFormat('yyyy-MM-dd–kk-mm').format(now);
-      final newFileName = saveFolderPath + '/VIDEO-$formattedDate.mp4';
-      print(newFileName);
-      await originalFile.copy(newFileName);
-      return true;
-    } catch (e) {
-      return false;
-    }
   }
 
   Future<bool> deleteFile(imgPath) async {
@@ -271,58 +207,6 @@ class _ViewStatusState extends State<ViewStatus> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              GestureDetector(
-                onTap: () async {
-                  if (widget.filePath.endsWith(".jpg")) {
-                    if (await saveImgFIle(widget.filePath)) {
-                      Fluttertoast.showToast(
-                          msg: "Saved...",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.BOTTOM,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.grey,
-                          textColor: Colors.black,
-                          fontSize: 16.0);
-                    }
-                  } else {
-                    if (await saveVidFIle(widget.filePath)) {
-                      Fluttertoast.showToast(
-                          msg: "Saved...",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.BOTTOM,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.grey,
-                          textColor: Colors.black,
-                          fontSize: 16.0);
-                    }
-                  }
-                },
-                child: Container(
-                  height: 100,
-                  width: 90,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).backgroundColor,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        FontAwesomeIcons.save,
-                        color: Theme.of(context).iconTheme.color,
-                        size: 30,
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        'Save',
-                        style: Theme.of(context).textTheme.bodyText1,
-                      )
-                    ],
-                  ),
-                ),
-              ),
               GestureDetector(
                 onTap: () async {
                   Share.shareFiles([widget.filePath],

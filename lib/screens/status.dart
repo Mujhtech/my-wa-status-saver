@@ -5,9 +5,9 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:thumbnails/thumbnails.dart';
 import 'package:whatsapp_status_saver/screens/view.dart';
+import 'package:whatsapp_status_saver/utils.dart';
 
-final Directory _fileDir = Directory(
-    '/storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Media/.Statuses');
+final Directory _fileDir = Directory(folderPath);
 
 class MyStatus extends StatefulWidget {
   @override
