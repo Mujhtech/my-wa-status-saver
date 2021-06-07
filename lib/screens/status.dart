@@ -6,8 +6,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:thumbnails/thumbnails.dart';
 import 'package:whatsapp_status_saver/screens/view.dart';
 
-final Directory _fileDir =
-    Directory('/storage/emulated/0/WhatsApp/Media/.Statuses');
+final Directory _fileDir = Directory(
+    '/storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Media/.Statuses');
 
 class MyStatus extends StatefulWidget {
   @override
@@ -15,7 +15,7 @@ class MyStatus extends StatefulWidget {
 }
 
 class _MyStatusState extends State<MyStatus> {
-  var fileList;
+  List fileList;
 
   Future<String> _getImage(videoPathUrl) async {
     final thumb = await Thumbnails.getThumbnail(

@@ -4,6 +4,7 @@ import 'package:share/share.dart';
 import 'package:whatsapp_status_saver/screens/saved.dart';
 import 'package:whatsapp_status_saver/screens/status.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:share/share.dart';
 
 void main() {
   runApp(MyApp());
@@ -112,73 +113,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    void settingModalBottomSheet() {
-      showModalBottomSheet(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
-          isScrollControlled: true,
-          enableDrag: true,
-          context: context,
-          builder: (BuildContext bc) {
-            return Container(
-              padding: EdgeInsets.fromLTRB(15, 0, 15, 20),
-              height: MediaQuery.of(context).size.height - 200,
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Center(
-                    child: SizedBox(
-                      width: 50,
-                      child: Divider(
-                          thickness: 3, color: Theme.of(context).dividerColor),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Rate Us',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText1
-                                .copyWith(fontSize: 16, color: Colors.grey)),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Share.share(
-                                'Download Whatsapp status with us stress click the link below to get My Whatsapp Status App \n https://mujh.tech');
-                          },
-                          child: Text('Share with people',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1
-                                  .copyWith(fontSize: 16, color: Colors.grey)),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Text('V1.0',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText1
-                                .copyWith(fontSize: 16, color: Colors.grey))
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            );
-          });
-    }
-
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -319,7 +253,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      settingModalBottomSheet();
+                      Share.share(
+                          "Hey! I've been using My Whatsapp Status Saver to save and share my status on Whatsapp. \n You should totally try it out too it's free \n https://mujh.tech");
                     },
                     child: Container(
                       height: 100,
@@ -340,7 +275,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: 5,
                           ),
                           Text(
-                            'Settings',
+                            'Share',
                             style: Theme.of(context).textTheme.bodyText1,
                           )
                         ],

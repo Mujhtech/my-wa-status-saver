@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -15,7 +14,7 @@ class MySaved extends StatefulWidget {
 }
 
 class _MySavedState extends State<MySaved> {
-  var fileList;
+  List fileList;
 
   Future<String> _getImage(videoPathUrl) async {
     final thumb = await Thumbnails.getThumbnail(
@@ -37,6 +36,11 @@ class _MySavedState extends State<MySaved> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: InkWell(
+          onTap: () => Navigator.pop(context),
+          child: Icon(Icons.keyboard_arrow_left,
+              size: 30, color: Theme.of(context).iconTheme.color),
+        ),
         centerTitle: true,
         elevation: 0,
         backgroundColor: Theme.of(context).backgroundColor,
