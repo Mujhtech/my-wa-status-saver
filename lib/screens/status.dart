@@ -31,6 +31,7 @@ class _MyStatusState extends State<MyStatus> {
     super.initState();
     fileList =
         _fileDir.listSync().map((item) => item.path).toList(growable: false);
+    print(fileList);
   }
 
   @override
@@ -51,7 +52,7 @@ class _MyStatusState extends State<MyStatus> {
         ),
       ),
       body: Container(
-        child: Directory('${_fileDir.path}').existsSync()
+        child: Directory('${_fileDir.path}').existsSync() && fileList.length > 0
             ? Container(
                 margin: const EdgeInsets.only(left: 8, right: 8),
                 child: AnimationLimiter(
@@ -180,7 +181,13 @@ class _MyStatusState extends State<MyStatus> {
                   ),
                 ),
               )
-            : Text('No status found'),
+            : Center(
+                child: Text('No status found',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1
+                        .copyWith(fontSize: 18, color: Color(0xFF30BC42))),
+              ),
       ),
     );
   }

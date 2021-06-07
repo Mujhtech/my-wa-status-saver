@@ -172,13 +172,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   GestureDetector(
                     onTap: () async {
                       if (await checkPermisson() == 1) {
-                        print('hi');
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => MyStatus()));
                       } else if (await requestStoragePermission() == 1) {
-                        print('hi');
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -214,11 +212,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   GestureDetector(
                     onTap: () async {
                       if (await checkPermisson() == 1) {
-                        print('hi');
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) => MySaved()));
                       } else if (await requestStoragePermission() == 1) {
-                        print('hi');
                         Navigator.push(
                             context,
                             MaterialPageRoute(
